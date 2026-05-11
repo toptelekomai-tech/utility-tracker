@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Счётчики ЖКХ</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+  <!-- ========== ЭКРАН 1: ВВОД ПОКАЗАНИЙ ========== -->
+  <div id="screen-main" class="screen active">
+    <div class="header">
+      <h1 class="app-title">⚡ Счётчики ЖКХ</h1>
+      <button class="btn-icon" id="btn-settings" title="Настройки тарифов">⚙️</button>
+    </div>
+
+    <div class="month-label" id="current-month">Май 2026</div>
+
+    <div class="meters-list">
+
+      <!-- Электричество -->
+      <div class="meter-card">
+        <div class="meter-header">
+          <span class="meter-icon">⚡</span>
+          <span class="meter-name">Электричество</span>
+          <span class="meter-unit">кВт·ч</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-electric">—</span>
+        </div>
+        <input
+          class="meter-input"
+          id="input-electric"
+          type="number"
+          inputmode="decimal"
+          placeholder="Введите показание"
+          min="0"
+        />
+      </div>
+
+      <!-- Холодная вода -->
+      <div class="meter-card">
+        <div class="meter-header">
+          <span class="meter-icon">🔵</span>
+          <span class="meter-name">Холодная вода</span>
+          <span class="meter-unit">м³</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-cold">—</span>
+        </div>
+        <input
+          class="meter-input"
+          id="input-cold"
+          type="number"
+          inputmode="decimal"
+          placeholder="Введите показание"
+          min="0"
+          step="0.001"
+        />
+      </div>
+
+      <!-- Горячая вода -->
+      <div class="meter-card">
+        <div class="meter-header">
+          <span class="meter-icon">🔴</span>
+          <span class="meter-name">Горячая вода</span>
+          <span class="meter-unit">м³</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-hot">—</span>
+        </div>
+        <input
+          class="meter-input"
+          id="input-hot"
+          type="number"
+          inputmode="decimal"
+          placeholder="Введите показание"
+          min="0"
+          step="0.001"
+        />
+      </div>
+
+    </div>
+
+    <button class="btn-primary" id="btn-calculate">Рассчитать →</button>
+  </div>
+
+
+  <!-- ========== ЭКРАН 2: РЕЗУЛЬТАТ ========== -->
+  <div id="screen-result" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-result">← Назад</button>
+      <h2 class="screen-title">Итог за месяц</h2>
+    </div>
+
+    <div class="result-month" id="result-month-label">Май 2026</div>
+
+    <div class="result-list">
+
+      <div class="result-row">
+        <div class="result-row-left">
+          <span>⚡ Электричество</span>
+          <span class="result-detail" id="result-electric-detail"></span>
+        </div>
+        <span class="result-price" id="result-electric-price">0 ₽</span>
+      </div>
+
+      <div class="result-row">
+        <div class="result-row-left">
+          <span>🔵 Холодная вода</span>
+          <span class="result-detail" id="result-cold-detail"></span>
+        </div>
+        <span class="result-price" id="result-cold-price">0 ₽</span>
+      </div>
+
+      <div class="result-row">
+        <div class="result-row-left">
+          <span>🔴 Горячая вода</span>
+          <span class="result-detail" id="result-hot-detail"></span>
+        </div>
+        <span class="result-price" id="result-hot-price">0 ₽</span>
+      </div>
+
+    </div>
+
+    <div class="result-total">
+      <span>Итого к оплате:</span>
+      <span class="result-total-price" id="result-total">0 ₽</span>
+    </div>
+
+    <button class="btn-primary" id="btn-save">Сохранить и закрыть ✓</button>
+  </div>
+
+
+  <!-- ========== ЭКРАН 3: НАСТРОЙКИ ТАРИФОВ ========== -->
+  <div id="screen-settings" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-settings">← Назад</button>
+      <h2 class="screen-title">Тарифы</h2>
+    </div>
+
+    <p class="settings-hint">Укажи тарифы из квитанции. Сохраняются автоматически.</p>
+
+    <div class="settings-list">
+
+      <div class="setting-row">
+        <label class="setting-label">⚡ Электричество (₽ / кВт·ч)</label>
+        <input class="setting-input" id="tariff-electric" type="number" inputmode="decimal" step="0.01" placeholder="например: 5.47" />
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-label">🔵 Холодная вода (₽ / м³)</label>
+        <input class="setting-input" id="tariff-cold" type="number" inputmode="decimal" step="0.01" placeholder="например: 38.06" />
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-label">🔴 Горячая вода (₽ / м³)</label>
+        <input class="setting-input" id="tariff-hot" type="number" inputmode="decimal" step="0.01" placeholder="например: 197.42" />
+      </div>
+
+    </div>
+
+    <button class="btn-primary" id="btn-save-settings">Сохранить тарифы ✓</button>
+    <div class="settings-saved" id="settings-saved-msg" style="display:none">✅ Тарифы сохранены!</div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>

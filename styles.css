@@ -1,0 +1,332 @@
+/* =============================================
+   ПЕРЕМЕННЫЕ — цвета подстраиваются под тему Telegram
+   ============================================= */
+:root {
+  --bg:          var(--tg-theme-bg-color, #ffffff);
+  --text:        var(--tg-theme-text-color, #1a1a1a);
+  --hint:        var(--tg-theme-hint-color, #888888);
+  --accent:      var(--tg-theme-button-color, #2196F3);
+  --accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --card-bg:     var(--tg-theme-secondary-bg-color, #f5f5f5);
+  --border:      rgba(0,0,0,0.08);
+
+  --radius:   16px;
+  --radius-sm: 10px;
+  --gap:      16px;
+}
+
+/* =============================================
+   СБРОС И БАЗА
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =============================================
+   ЭКРАНЫ (переключаются через JS)
+   ============================================= */
+.screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: var(--gap);
+  padding-bottom: 32px;
+  gap: var(--gap);
+  animation: fadeIn 0.2s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   ШАПКА
+   ============================================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.screen-title {
+  font-size: 18px;
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+
+/* =============================================
+   МЕТКА МЕСЯЦА
+   ============================================= */
+.month-label {
+  text-align: center;
+  color: var(--hint);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================
+   КАРТОЧКИ СЧЁТЧИКОВ
+   ============================================= */
+.meters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meter-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--border);
+}
+
+.meter-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meter-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.meter-name {
+  font-weight: 600;
+  font-size: 15px;
+  flex: 1;
+}
+
+.meter-unit {
+  font-size: 12px;
+  color: var(--hint);
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+}
+
+.meter-prev {
+  font-size: 13px;
+  color: var(--hint);
+}
+
+.meter-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  -moz-appearance: textfield;
+}
+
+.meter-input:focus {
+  border-color: var(--accent);
+}
+
+.meter-input::-webkit-outer-spin-button,
+.meter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* =============================================
+   КНОПКА ГЛАВНАЯ
+   ============================================= */
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: opacity 0.15s;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary:active {
+  opacity: 0.8;
+}
+
+/* =============================================
+   ЭКРАН РЕЗУЛЬТАТА
+   ============================================= */
+.result-month {
+  text-align: center;
+  color: var(--hint);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+.result-row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.result-detail {
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.result-price {
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.result-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--accent);
+  color: var(--accent-text);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.result-total-price {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* =============================================
+   ЭКРАН НАСТРОЕК
+   ============================================= */
+.settings-hint {
+  font-size: 14px;
+  color: var(--hint);
+  line-height: 1.5;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--hint);
+}
+
+.setting-input {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  -moz-appearance: textfield;
+}
+
+.setting-input:focus {
+  border-color: var(--accent);
+}
+
+.setting-input::-webkit-outer-spin-button,
+.setting-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.settings-saved {
+  text-align: center;
+  font-size: 15px;
+  color: #4CAF50;
+  font-weight: 500;
+  padding: 8px;
+}
