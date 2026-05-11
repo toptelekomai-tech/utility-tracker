@@ -294,7 +294,17 @@ function renderYearBlock(year, records) {
   heading.textContent = year;
   group.appendChild(heading);
 
-  records.forEach(r => {
+  records.forEach((r, idx) => {
+    const prev = records[idx + 1];
+    let trendHtml = '';
+    if (prev && prev.total > 0) {
+      const diff = (r.total - prev.total) / prev.total * 100;
+      const abs = Math.abs(diff).toFixed(0);
+      if (diff > 3)       trendHtml = `<span class="trend-chip trend-chip--up">+${abs}%</span>`;
+      else if (diff < -3) trendHtml = `<span class="trend-chip trend-chip--down">−${abs}%</span>`;
+      else                trendHtml = `<span class="trend-chip trend-chip--same">≈</span>`;
+    }
+
     const row = document.createElement('div');
     row.className = 'history-row';
     row.innerHTML = `
@@ -304,7 +314,10 @@ function renderYearBlock(year, records) {
         <span>🔵 ${fmt(r.cold.diff)} м³</span>
         <span>🔴 ${fmt(r.hot.diff)} м³</span>
       </div>
-      <div class="history-row-total">${rub(r.total)}</div>
+      <div class="history-row-right">
+        ${trendHtml}
+        <div class="history-row-total">${rub(r.total)}</div>
+      </div>
     `;
     group.appendChild(row);
   });

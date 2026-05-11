@@ -1,5 +1,5 @@
 /* =============================================
-   ПЕРЕМЕННЫЕ — цвета подстраиваются под тему Telegram
+   ПЕРЕМЕННЫЕ
    ============================================= */
 :root {
   --bg:          var(--tg-theme-bg-color, #ffffff);
@@ -10,9 +10,18 @@
   --card-bg:     var(--tg-theme-secondary-bg-color, #f5f5f5);
   --border:      rgba(0,0,0,0.08);
 
-  --radius:   16px;
+  --radius:    16px;
   --radius-sm: 10px;
-  --gap:      16px;
+  --gap:       16px;
+
+  /* Цвета счётчиков — работают поверх любой темы Telegram */
+  --color-electric:    #F59E0B;
+  --color-electric-bg: rgba(245, 158, 11, 0.10);
+  --color-cold:        #3B82F6;
+  --color-cold-bg:     rgba(59, 130, 246, 0.10);
+  --color-hot:         #EF4444;
+  --color-hot-bg:      rgba(239, 68, 68, 0.10);
+  --color-success:     #10B981;
 }
 
 /* =============================================
@@ -34,7 +43,7 @@ html, body {
 }
 
 /* =============================================
-   ЭКРАНЫ (переключаются через JS)
+   ЭКРАНЫ
    ============================================= */
 .screen {
   display: none;
@@ -46,9 +55,7 @@ html, body {
   animation: fadeIn 0.2s ease;
 }
 
-.screen.active {
-  display: flex;
-}
+.screen.active { display: flex; }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
@@ -80,7 +87,7 @@ html, body {
 .btn-icon {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   padding: 4px;
   line-height: 1;
@@ -97,16 +104,20 @@ html, body {
   white-space: nowrap;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /* =============================================
    МЕТКА МЕСЯЦА
    ============================================= */
 .month-label {
   text-align: center;
   color: var(--hint);
-  font-size: 14px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 /* =============================================
@@ -126,6 +137,22 @@ html, body {
   flex-direction: column;
   gap: 8px;
   border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+}
+
+.meter-card--electric {
+  border-left-color: var(--color-electric);
+  background: linear-gradient(135deg, var(--color-electric-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-card--cold {
+  border-left-color: var(--color-cold);
+  background: linear-gradient(135deg, var(--color-cold-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-card--hot {
+  border-left-color: var(--color-hot);
+  background: linear-gradient(135deg, var(--color-hot-bg) 0%, var(--card-bg) 60%);
 }
 
 .meter-header {
@@ -135,9 +162,17 @@ html, body {
 }
 
 .meter-icon {
-  font-size: 20px;
-  line-height: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
+
+.meter-icon--electric { color: var(--color-electric); }
+.meter-icon--cold     { color: var(--color-cold); }
+.meter-icon--hot      { color: var(--color-hot); }
 
 .meter-name {
   font-weight: 600;
@@ -170,17 +205,15 @@ html, body {
   color: var(--text);
   outline: none;
   transition: border-color 0.15s;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
   -moz-appearance: textfield;
 }
 
-.meter-input:focus {
-  border-color: var(--accent);
-}
+.meter-input:focus { border-color: var(--accent); }
 
 .meter-input::-webkit-outer-spin-button,
-.meter-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
+.meter-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
 /* =============================================
    КНОПКА ГЛАВНАЯ
@@ -196,12 +229,15 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   margin-top: auto;
-  transition: opacity 0.15s;
   letter-spacing: 0.01em;
+  transition: opacity 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
 }
 
 .btn-primary:active {
-  opacity: 0.8;
+  opacity: 0.85;
+  transform: translateY(1px);
 }
 
 /* =============================================
@@ -210,10 +246,8 @@ html, body {
 .result-month {
   text-align: center;
   color: var(--hint);
-  font-size: 14px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .result-list {
@@ -230,15 +264,29 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 14px 16px 14px 32px;
   background: var(--card-bg);
   border-bottom: 1px solid var(--border);
   gap: 12px;
+  position: relative;
 }
 
-.result-row:last-child {
-  border-bottom: none;
+.result-row:last-child { border-bottom: none; }
+
+.result-row::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
+
+.result-row--electric::before { background: var(--color-electric); }
+.result-row--cold::before     { background: var(--color-cold); }
+.result-row--hot::before      { background: var(--color-hot); }
 
 .result-row-left {
   display: flex;
@@ -255,6 +303,7 @@ html, body {
   font-weight: 600;
   font-size: 16px;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .result-total {
@@ -269,8 +318,10 @@ html, body {
 }
 
 .result-total-price {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* =============================================
@@ -311,22 +362,21 @@ html, body {
   color: var(--text);
   outline: none;
   transition: border-color 0.15s;
+  font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
 }
 
-.setting-input:focus {
-  border-color: var(--accent);
-}
+.setting-input:focus { border-color: var(--accent); }
 
 .setting-input::-webkit-outer-spin-button,
-.setting-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
+.setting-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.settings-saved {
+  text-align: center;
+  font-size: 15px;
+  color: var(--color-success);
+  font-weight: 500;
+  padding: 8px;
 }
 
 .settings-section-title {
@@ -336,14 +386,6 @@ html, body {
   letter-spacing: 0.06em;
   color: var(--hint);
   margin-bottom: 4px;
-}
-
-.settings-saved {
-  text-align: center;
-  font-size: 15px;
-  color: #4CAF50;
-  font-weight: 500;
-  padding: 8px;
 }
 
 /* =============================================
@@ -363,9 +405,7 @@ html, body {
   margin-top: 8px;
 }
 
-.btn-secondary:active {
-  opacity: 0.7;
-}
+.btn-secondary:active { opacity: 0.7; }
 
 /* =============================================
    РАЗДЕЛ ВЛАДЕЛЬЦА
@@ -378,7 +418,7 @@ html, body {
 
 .owner-status {
   font-size: 13px;
-  color: #4CAF50;
+  color: var(--color-success);
   text-align: center;
   padding: 4px;
   min-height: 20px;
@@ -395,9 +435,7 @@ html, body {
   padding: 40px 20px;
 }
 
-.history-year-group {
-  margin-bottom: 20px;
-}
+.history-year-group { margin-bottom: 20px; }
 
 .history-year-heading {
   font-size: 13px;
@@ -435,9 +473,29 @@ html, body {
   flex-wrap: wrap;
 }
 
+.history-row-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 .history-row-total {
   font-weight: 700;
   font-size: 15px;
   color: var(--accent);
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
+
+.trend-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.trend-chip--up   { background: rgba(239, 68, 68, 0.12);  color: #EF4444; }
+.trend-chip--down { background: rgba(16, 185, 129, 0.12); color: #10B981; }
+.trend-chip--same { background: rgba(136,136,136, 0.12);  color: var(--hint); }

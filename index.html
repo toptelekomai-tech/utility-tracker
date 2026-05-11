@@ -12,7 +12,7 @@
   <!-- ========== ЭКРАН 1: ВВОД ПОКАЗАНИЙ ========== -->
   <div id="screen-main" class="screen active">
     <div class="header">
-      <h1 class="app-title">⚡ Счётчики ЖКХ</h1>
+      <h1 class="app-title">Счётчики ЖКХ</h1>
       <div class="header-actions">
         <button class="btn-icon" id="btn-history" style="display:none" title="История">📊</button>
         <button class="btn-icon" id="btn-settings" title="Настройки">⚙️</button>
@@ -24,9 +24,13 @@
     <div class="meters-list">
 
       <!-- Электричество -->
-      <div class="meter-card">
+      <div class="meter-card meter-card--electric">
         <div class="meter-header">
-          <span class="meter-icon">⚡</span>
+          <span class="meter-icon meter-icon--electric">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+            </svg>
+          </span>
           <span class="meter-name">Электричество</span>
           <span class="meter-unit">кВт·ч</span>
         </div>
@@ -44,9 +48,13 @@
       </div>
 
       <!-- Холодная вода -->
-      <div class="meter-card">
+      <div class="meter-card meter-card--cold">
         <div class="meter-header">
-          <span class="meter-icon">🔵</span>
+          <span class="meter-icon meter-icon--cold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C12 2 5 10 5 15C5 18.866 8.134 22 12 22C15.866 22 19 18.866 19 15C19 10 12 2 12 2Z"/>
+            </svg>
+          </span>
           <span class="meter-name">Холодная вода</span>
           <span class="meter-unit">м³</span>
         </div>
@@ -65,9 +73,14 @@
       </div>
 
       <!-- Горячая вода -->
-      <div class="meter-card">
+      <div class="meter-card meter-card--hot">
         <div class="meter-header">
-          <span class="meter-icon">🔴</span>
+          <span class="meter-icon meter-icon--hot">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C12 2 5 10 5 15C5 18.866 8.134 22 12 22C15.866 22 19 18.866 19 15C19 10 12 2 12 2Z"/>
+              <path d="M12 8C12 8 9 12 9 14.5C9 16.433 10.343 18 12 18C13.657 18 15 16.433 15 14.5C15 12 12 8 12 8Z" fill="white" opacity="0.4"/>
+            </svg>
+          </span>
           <span class="meter-name">Горячая вода</span>
           <span class="meter-unit">м³</span>
         </div>
@@ -102,25 +115,25 @@
 
     <div class="result-list">
 
-      <div class="result-row">
+      <div class="result-row result-row--electric">
         <div class="result-row-left">
-          <span>⚡ Электричество</span>
+          <span>Электричество</span>
           <span class="result-detail" id="result-electric-detail"></span>
         </div>
         <span class="result-price" id="result-electric-price">0 ₽</span>
       </div>
 
-      <div class="result-row">
+      <div class="result-row result-row--cold">
         <div class="result-row-left">
-          <span>🔵 Холодная вода</span>
+          <span>Холодная вода</span>
           <span class="result-detail" id="result-cold-detail"></span>
         </div>
         <span class="result-price" id="result-cold-price">0 ₽</span>
       </div>
 
-      <div class="result-row">
+      <div class="result-row result-row--hot">
         <div class="result-row-left">
-          <span>🔴 Горячая вода</span>
+          <span>Горячая вода</span>
           <span class="result-detail" id="result-hot-detail"></span>
         </div>
         <span class="result-price" id="result-hot-price">0 ₽</span>
