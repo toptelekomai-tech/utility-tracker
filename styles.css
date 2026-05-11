@@ -323,6 +323,15 @@ html, body {
   -webkit-appearance: none;
 }
 
+.settings-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hint);
+  margin-bottom: 4px;
+}
+
 .settings-saved {
   text-align: center;
   font-size: 15px;

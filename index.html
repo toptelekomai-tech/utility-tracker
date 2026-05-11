@@ -138,32 +138,49 @@
   <div id="screen-settings" class="screen">
     <div class="header">
       <button class="btn-back" id="btn-back-from-settings">← Назад</button>
-      <h2 class="screen-title">Тарифы</h2>
+      <h2 class="screen-title">Настройки</h2>
     </div>
 
-    <p class="settings-hint">Укажи тарифы из квитанции. Сохраняются автоматически.</p>
+    <!-- Показания прошлого месяца (вводятся один раз при первом запуске) -->
+    <div class="settings-section-title">Показания прошлого месяца</div>
+    <p class="settings-hint">Введи один раз — дальше приложение будет запоминать само.</p>
 
     <div class="settings-list">
+      <div class="setting-row">
+        <label class="setting-label">⚡ Электричество (кВт·ч)</label>
+        <input class="setting-input" id="prev-setting-electric" type="number" inputmode="decimal" step="0.001" placeholder="например: 14502" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔵 Холодная вода (м³)</label>
+        <input class="setting-input" id="prev-setting-cold" type="number" inputmode="decimal" step="0.001" placeholder="например: 123.456" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔴 Горячая вода (м³)</label>
+        <input class="setting-input" id="prev-setting-hot" type="number" inputmode="decimal" step="0.001" placeholder="например: 87.123" />
+      </div>
+    </div>
 
+    <!-- Тарифы -->
+    <div class="settings-section-title" style="margin-top:20px">Тарифы</div>
+    <p class="settings-hint">Цены из квитанции ЖКХ.</p>
+
+    <div class="settings-list">
       <div class="setting-row">
         <label class="setting-label">⚡ Электричество (₽ / кВт·ч)</label>
         <input class="setting-input" id="tariff-electric" type="number" inputmode="decimal" step="0.01" placeholder="например: 5.47" />
       </div>
-
       <div class="setting-row">
         <label class="setting-label">🔵 Холодная вода (₽ / м³)</label>
         <input class="setting-input" id="tariff-cold" type="number" inputmode="decimal" step="0.01" placeholder="например: 38.06" />
       </div>
-
       <div class="setting-row">
         <label class="setting-label">🔴 Горячая вода (₽ / м³)</label>
         <input class="setting-input" id="tariff-hot" type="number" inputmode="decimal" step="0.01" placeholder="например: 197.42" />
       </div>
-
     </div>
 
-    <button class="btn-primary" id="btn-save-settings">Сохранить тарифы ✓</button>
-    <div class="settings-saved" id="settings-saved-msg" style="display:none">✅ Тарифы сохранены!</div>
+    <button class="btn-primary" id="btn-save-settings">Сохранить ✓</button>
+    <div class="settings-saved" id="settings-saved-msg" style="display:none">✅ Настройки сохранены!</div>
   </div>
 
 

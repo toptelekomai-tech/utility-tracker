@@ -70,6 +70,17 @@ function loadAll() {
     document.getElementById('prev-hot').textContent = val ? `${val} м³` : '—';
   });
 
+  // Загружаем прошлые показания в поля настроек
+  Storage.get('prev_electric', val => {
+    if (val) document.getElementById('prev-setting-electric').value = val;
+  });
+  Storage.get('prev_cold', val => {
+    if (val) document.getElementById('prev-setting-cold').value = val;
+  });
+  Storage.get('prev_hot', val => {
+    if (val) document.getElementById('prev-setting-hot').value = val;
+  });
+
   // Загружаем тарифы в настройки
   Storage.get('tariff_electric', val => {
     if (val) document.getElementById('tariff-electric').value = val;
@@ -184,23 +195,39 @@ function saveAndClose() {
 //  СОХРАНЕНИЕ ТАРИФОВ
 // =============================================
 function saveSettings() {
-  const el   = document.getElementById('tariff-electric').value.trim();
-  const cold = document.getElementById('tariff-cold').value.trim();
-  const hot  = document.getElementById('tariff-hot').value.trim();
+  const prevEl   = document.getElementById('prev-setting-electric').value.trim();
+  const prevCold = document.getElementById('prev-setting-cold').value.trim();
+  const prevHot  = document.getElementById('prev-setting-hot').value.trim();
+  const el       = document.getElementById('tariff-electric').value.trim();
+  const cold     = document.getElementById('tariff-cold').value.trim();
+  const hot      = document.getElementById('tariff-hot').value.trim();
 
   if (!el || !cold || !hot) {
     alert('Заполни все три тарифа.');
     return;
   }
 
-  Storage.set('tariff_electric', el, () => {
-  Storage.set('tariff_cold', cold, () => {
-  Storage.set('tariff_hot', hot, () => {
-    const msg = document.getElementById('settings-saved-msg');
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 2000);
-  });
-  });
+  const saves = [
+    ['tariff_electric', el],
+    ['tariff_cold',     cold],
+    ['tariff_hot',      hot],
+  ];
+
+  if (prevEl)   saves.push(['prev_electric', prevEl]);
+  if (prevCold) saves.push(['prev_cold',     prevCold]);
+  if (prevHot)  saves.push(['prev_hot',      prevHot]);
+
+  let done = 0;
+  saves.forEach(([key, value]) => {
+    Storage.set(key, value, () => {
+      done++;
+      if (done === saves.length) {
+        loadAll();
+        const msg = document.getElementById('settings-saved-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 2000);
+      }
+    });
   });
 }
 
