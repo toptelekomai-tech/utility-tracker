@@ -13,7 +13,10 @@
   <div id="screen-main" class="screen active">
     <div class="header">
       <h1 class="app-title">⚡ Счётчики ЖКХ</h1>
-      <button class="btn-icon" id="btn-settings" title="Настройки тарифов">⚙️</button>
+      <div class="header-actions">
+        <button class="btn-icon" id="btn-history" style="display:none" title="История">📊</button>
+        <button class="btn-icon" id="btn-settings" title="Настройки">⚙️</button>
+      </div>
     </div>
 
     <div class="month-label" id="current-month">Май 2026</div>
@@ -138,7 +141,7 @@
   <div id="screen-settings" class="screen">
     <div class="header">
       <button class="btn-back" id="btn-back-from-settings">← Назад</button>
-      <h2 class="screen-title">Настройки</h2>
+      <h2 class="screen-title" id="settings-title">Настройки</h2>
     </div>
 
     <!-- Показания прошлого месяца (вводятся один раз при первом запуске) -->
@@ -179,8 +182,34 @@
       </div>
     </div>
 
+    <!-- Скрытый раздел владельца — появляется после 5 нажатий на «Настройки» -->
+    <div class="owner-section" id="owner-section" style="display:none">
+      <div class="settings-section-title" style="margin-top:20px">🔐 Для владельца</div>
+      <div class="settings-list">
+        <div class="setting-row">
+          <label class="setting-label">🤖 Токен бота (от BotFather)</label>
+          <input class="setting-input" id="bot-token" type="text" autocomplete="off" placeholder="7412638590:AAFxxx..." />
+        </div>
+      </div>
+      <button class="btn-secondary" id="btn-set-owner">👤 Я — владелец этой квартиры</button>
+      <div class="owner-status" id="owner-status"></div>
+    </div>
+
     <button class="btn-primary" id="btn-save-settings">Сохранить ✓</button>
     <div class="settings-saved" id="settings-saved-msg" style="display:none">✅ Настройки сохранены!</div>
+  </div>
+
+
+  <!-- ========== ЭКРАН 4: ИСТОРИЯ ========== -->
+  <div id="screen-history" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-history">← Назад</button>
+      <h2 class="screen-title">История</h2>
+    </div>
+    <div id="history-content"></div>
+    <div class="history-empty" id="history-empty" style="display:none">
+      Пока нет сохранённых данных.<br/>Рассчитай первый месяц!
+    </div>
   </div>
 
 
