@@ -780,8 +780,9 @@ function saveSettings() {
   const drainage = document.getElementById('tariff-drainage').value.trim();
   const botToken = document.getElementById('bot-token').value.trim();
 
-  if (!el || !cold || !hot || !gas) {
-    alert('Заполни все четыре тарифа.');
+  const gasOn = document.getElementById('toggle-gas').checked;
+  if (!el || !cold || !hot || (gasOn && !gas)) {
+    alert('Заполни тарифы (электричество, холодная и горячая вода' + (gasOn ? ', газ' : '') + ').');
     return;
   }
 
