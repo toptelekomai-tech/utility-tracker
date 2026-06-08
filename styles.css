@@ -1,0 +1,691 @@
+/* =============================================
+   ПЕРЕМЕННЫЕ
+   ============================================= */
+:root {
+  --bg:          var(--tg-theme-bg-color, #ffffff);
+  --text:        var(--tg-theme-text-color, #1a1a1a);
+  --hint:        var(--tg-theme-hint-color, #888888);
+  --accent:      var(--tg-theme-button-color, #2196F3);
+  --accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --card-bg:     var(--tg-theme-secondary-bg-color, #f5f5f5);
+  --border:      rgba(0,0,0,0.08);
+
+  --radius:    16px;
+  --radius-sm: 10px;
+  --gap:       16px;
+
+  /* Цвета счётчиков — работают поверх любой темы Telegram */
+  --color-electric:    #F59E0B;
+  --color-electric-bg: rgba(245, 158, 11, 0.10);
+  --color-cold:        #3B82F6;
+  --color-cold-bg:     rgba(59, 130, 246, 0.10);
+  --color-hot:         #EF4444;
+  --color-hot-bg:      rgba(239, 68, 68, 0.10);
+  --color-gas:         #8B5CF6;
+  --color-gas-bg:      rgba(139, 92, 246, 0.10);
+  --color-hot-heat:    #F97316;
+  --color-hot-heat-bg: rgba(249, 115, 22, 0.10);
+  --color-drainage:    #06B6D4;
+  --color-drainage-bg: rgba(6, 182, 212, 0.10);
+  --color-internet:    #10B981;
+  --color-internet-bg: rgba(16, 185, 129, 0.10);
+  --color-success:     #10B981;
+}
+
+/* =============================================
+   СБРОС И БАЗА
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =============================================
+   ЭКРАНЫ
+   ============================================= */
+.screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: var(--gap);
+  padding-bottom: 32px;
+  gap: var(--gap);
+  animation: fadeIn 0.2s ease;
+}
+
+.screen.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   ШАПКА
+   ============================================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.screen-title {
+  font-size: 18px;
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* =============================================
+   СЕЛЕКТОР КВАРТИРЫ
+   ============================================= */
+.apt-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+}
+
+.apt-selector {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* =============================================
+   МЕТКА МЕСЯЦА + РОЛЬ
+   ============================================= */
+.month-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.month-label {
+  color: var(--hint);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.role-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.role-badge:empty { display: none; }
+
+.role-badge--owner  { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+.role-badge--tenant { background: rgba(59, 130, 246, 0.15);  color: #3B82F6; }
+
+/* =============================================
+   КАРТОЧКИ СЧЁТЧИКОВ
+   ============================================= */
+.meters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meter-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+}
+
+.meter-card--electric {
+  border-left-color: var(--color-electric);
+  background: linear-gradient(135deg, var(--color-electric-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-card--cold {
+  border-left-color: var(--color-cold);
+  background: linear-gradient(135deg, var(--color-cold-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-card--hot {
+  border-left-color: var(--color-hot);
+  background: linear-gradient(135deg, var(--color-hot-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-card--gas {
+  border-left-color: var(--color-gas);
+  background: linear-gradient(135deg, var(--color-gas-bg) 0%, var(--card-bg) 60%);
+}
+
+.meter-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meter-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meter-icon--electric { color: var(--color-electric); }
+.meter-icon--cold     { color: var(--color-cold); }
+.meter-icon--hot      { color: var(--color-hot); }
+.meter-icon--gas      { color: var(--color-gas); }
+
+.meter-name {
+  font-weight: 600;
+  font-size: 15px;
+  flex: 1;
+}
+
+.meter-unit {
+  font-size: 12px;
+  color: var(--hint);
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+}
+
+.meter-prev {
+  font-size: 13px;
+  color: var(--hint);
+}
+
+.meter-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  -moz-appearance: textfield;
+}
+
+.meter-input:focus { border-color: var(--accent); }
+
+.meter-input::-webkit-outer-spin-button,
+.meter-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.meter-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.meter-input-row .meter-input {
+  flex: 1;
+}
+
+.btn-camera {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-camera:active { border-color: var(--accent); }
+
+/* =============================================
+   КНОПКА ГЛАВНАЯ
+   ============================================= */
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+
+.btn-primary:active {
+  opacity: 0.85;
+  transform: translateY(1px);
+}
+
+/* =============================================
+   ЭКРАН РЕЗУЛЬТАТА
+   ============================================= */
+.result-month {
+  text-align: center;
+  color: var(--hint);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 14px 32px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  position: relative;
+}
+
+.result-row:last-child { border-bottom: none; }
+
+.result-row::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.result-row--electric::before  { background: var(--color-electric); }
+.result-row--cold::before      { background: var(--color-cold); }
+.result-row--hot::before       { background: var(--color-hot); }
+.result-row--gas::before       { background: var(--color-gas); }
+.result-row--hot-heat::before  { background: var(--color-hot-heat); }
+.result-row--drainage::before  { background: var(--color-drainage); }
+.result-row--internet::before  { background: var(--color-internet); }
+
+/* Тумблер */
+.setting-row--toggle { align-items: center; }
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0;
+  background: #ccc; border-radius: 26px; cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute; left: 3px; top: 3px;
+  width: 20px; height: 20px;
+  background: #fff; border-radius: 50%;
+  transition: transform 0.2s;
+}
+.toggle-switch input:checked + .toggle-slider { background: var(--color-gas); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+.result-row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.result-detail {
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.result-price {
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--accent);
+  color: var(--accent-text);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.result-total-price {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =============================================
+   ЭКРАН НАСТРОЕК
+   ============================================= */
+.settings-hint {
+  font-size: 14px;
+  color: var(--hint);
+  line-height: 1.5;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--hint);
+}
+
+.setting-input {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+
+.setting-input:focus { border-color: var(--accent); }
+
+.setting-input::-webkit-outer-spin-button,
+.setting-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.settings-saved {
+  text-align: center;
+  font-size: 15px;
+  color: var(--color-success);
+  font-weight: 500;
+  padding: 8px;
+}
+
+.settings-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hint);
+  margin-bottom: 4px;
+}
+
+/* =============================================
+   КНОПКА ВТОРИЧНАЯ
+   ============================================= */
+.btn-secondary {
+  width: 100%;
+  background: var(--card-bg);
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-top: 8px;
+}
+
+.btn-secondary:active { opacity: 0.7; }
+
+/* =============================================
+   РАЗДЕЛ ВЛАДЕЛЬЦА
+   ============================================= */
+.owner-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.owner-status {
+  font-size: 13px;
+  color: var(--color-success);
+  text-align: center;
+  padding: 4px;
+  min-height: 20px;
+}
+
+.act-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+  white-space: pre-line;
+}
+
+/* =============================================
+   ИСТОРИЯ
+   ============================================= */
+.history-empty {
+  text-align: center;
+  color: var(--hint);
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 40px 20px;
+}
+
+.history-year-group { margin-bottom: 20px; }
+
+.history-year-heading {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hint);
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 4px;
+  border: 1px solid var(--border);
+}
+
+.history-row-month {
+  font-weight: 600;
+  font-size: 14px;
+  min-width: 72px;
+}
+
+.history-row-details {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--hint);
+  flex-wrap: wrap;
+}
+
+.history-row-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.history-row-total {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.trend-chip--up   { background: rgba(239, 68, 68, 0.12);  color: #EF4444; }
+.trend-chip--down { background: rgba(16, 185, 129, 0.12); color: #10B981; }
+.trend-chip--same { background: rgba(136,136,136, 0.12);  color: var(--hint); }
+
+.history-row--tenant {
+  align-items: center;
+}
+
+.tenant-trend-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tenant-trend-desc {
+  font-size: 12px;
+  color: var(--hint);
+}
+
+/* =============================================
+   ГРАФИК
+   ============================================= */
+#history-chart-wrap {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px 12px 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 80px;
+  margin-bottom: 4px;
+}
+
+.chart-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chart-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+  opacity: 0.75;
+  min-height: 4px;
+  transition: height 0.4s ease;
+}
+
+.chart-bar-label {
+  font-size: 9px;
+  color: var(--hint);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.chart-bar-value {
+  font-size: 9px;
+  color: var(--hint);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}

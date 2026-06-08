@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Счётчики ЖКХ</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ========== ЭКРАН 1: ВВОД ПОКАЗАНИЙ ========== -->
+  <div id="screen-main" class="screen active">
+    <div class="header">
+      <h1 class="app-title">Счётчики ЖКХ</h1>
+      <div class="header-actions">
+        <button class="btn-icon" id="btn-remind" style="display:none" title="Напомнить жильцу">🔔</button>
+        <button class="btn-icon" id="btn-history" style="display:none" title="История">📊</button>
+        <button class="btn-icon" id="btn-settings" title="Настройки">⚙️</button>
+      </div>
+    </div>
+
+    <div class="apt-selector-wrap" id="apt-selector-wrap" style="display:none">
+      <select class="apt-selector" id="apt-selector"></select>
+      <button class="btn-icon" id="btn-add-apt" title="Добавить квартиру">＋</button>
+    </div>
+    <div class="month-row">
+      <div class="month-label" id="current-month">Май 2026</div>
+      <span class="role-badge" id="role-badge"></span>
+    </div>
+
+    <div class="meters-list">
+
+      <!-- Электричество -->
+      <div class="meter-card meter-card--electric">
+        <div class="meter-header">
+          <span class="meter-icon meter-icon--electric">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+            </svg>
+          </span>
+          <span class="meter-name">Электричество</span>
+          <span class="meter-unit">кВт·ч</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-electric">—</span>
+        </div>
+        <div class="meter-input-row">
+          <input
+            class="meter-input"
+            id="input-electric"
+            type="number"
+            inputmode="decimal"
+            placeholder="Введите показание"
+            min="0"
+          />
+          <label class="btn-camera" title="Сфотографировать счётчик">
+            📷
+            <input type="file" accept="image/*" capture="environment" style="display:none"
+              onchange="handleMeterPhoto(this, 'input-electric')" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Холодная вода -->
+      <div class="meter-card meter-card--cold">
+        <div class="meter-header">
+          <span class="meter-icon meter-icon--cold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C12 2 5 10 5 15C5 18.866 8.134 22 12 22C15.866 22 19 18.866 19 15C19 10 12 2 12 2Z"/>
+            </svg>
+          </span>
+          <span class="meter-name">Холодная вода</span>
+          <span class="meter-unit">м³</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-cold">—</span>
+        </div>
+        <div class="meter-input-row">
+          <input
+            class="meter-input"
+            id="input-cold"
+            type="number"
+            inputmode="decimal"
+            placeholder="Введите показание"
+            min="0"
+            step="0.001"
+          />
+          <label class="btn-camera" title="Сфотографировать счётчик">
+            📷
+            <input type="file" accept="image/*" capture="environment" style="display:none"
+              onchange="handleMeterPhoto(this, 'input-cold')" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Горячая вода -->
+      <div class="meter-card meter-card--hot">
+        <div class="meter-header">
+          <span class="meter-icon meter-icon--hot">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C12 2 5 10 5 15C5 18.866 8.134 22 12 22C15.866 22 19 18.866 19 15C19 10 12 2 12 2Z"/>
+              <path d="M12 8C12 8 9 12 9 14.5C9 16.433 10.343 18 12 18C13.657 18 15 16.433 15 14.5C15 12 12 8 12 8Z" fill="white" opacity="0.4"/>
+            </svg>
+          </span>
+          <span class="meter-name">Горячая вода</span>
+          <span class="meter-unit">м³</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-hot">—</span>
+        </div>
+        <div class="meter-input-row">
+          <input
+            class="meter-input"
+            id="input-hot"
+            type="number"
+            inputmode="decimal"
+            placeholder="Введите показание"
+            min="0"
+            step="0.001"
+          />
+          <label class="btn-camera" title="Сфотографировать счётчик">
+            📷
+            <input type="file" accept="image/*" capture="environment" style="display:none"
+              onchange="handleMeterPhoto(this, 'input-hot')" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Газ -->
+      <div class="meter-card meter-card--gas" id="meter-gas">
+        <div class="meter-header">
+          <span class="meter-icon meter-icon--gas">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C9 6 7 9 7 13C7 16.866 9.239 20 12 20C14.761 20 17 16.866 17 13C17 9 15 6 12 2Z"/>
+              <path d="M12 9C11 11 10 12.5 10 14C10 15.105 10.895 16 12 16C13.105 16 14 15.105 14 14C14 12.5 13 11 12 9Z" fill="white" opacity="0.5"/>
+              <path d="M8 18C8 18 6 19 6 21H18C18 19 16 18 16 18C14.8 19 13.4 19.5 12 19.5C10.6 19.5 9.2 19 8 18Z"/>
+            </svg>
+          </span>
+          <span class="meter-name">Газ</span>
+          <span class="meter-unit">м³</span>
+        </div>
+        <div class="meter-prev">
+          Прошлый месяц: <span id="prev-gas">—</span>
+        </div>
+        <div class="meter-input-row">
+          <input
+            class="meter-input"
+            id="input-gas"
+            type="number"
+            inputmode="decimal"
+            placeholder="Введите показание"
+            min="0"
+            step="0.001"
+          />
+          <label class="btn-camera" title="Сфотографировать счётчик">
+            📷
+            <input type="file" accept="image/*" capture="environment" style="display:none"
+              onchange="handleMeterPhoto(this, 'input-gas')" />
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="btn-primary" id="btn-calculate">Рассчитать →</button>
+  </div>
+
+
+  <!-- ========== ЭКРАН 2: РЕЗУЛЬТАТ ========== -->
+  <div id="screen-result" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-result">← Назад</button>
+      <h2 class="screen-title">Итог за месяц</h2>
+    </div>
+
+    <div class="result-month" id="result-month-label">Май 2026</div>
+
+    <div class="result-list">
+
+      <div class="result-row result-row--electric">
+        <div class="result-row-left">
+          <span>Электричество</span>
+          <span class="result-detail" id="result-electric-detail"></span>
+        </div>
+        <span class="result-price" id="result-electric-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--cold">
+        <div class="result-row-left">
+          <span>Холодная вода</span>
+          <span class="result-detail" id="result-cold-detail"></span>
+        </div>
+        <span class="result-price" id="result-cold-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--hot">
+        <div class="result-row-left">
+          <span>Горячая вода</span>
+          <span class="result-detail" id="result-hot-detail"></span>
+        </div>
+        <span class="result-price" id="result-hot-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--hot-heat">
+        <div class="result-row-left">
+          <span>Подогрев г/в</span>
+          <span class="result-detail" id="result-hot-heat-detail"></span>
+        </div>
+        <span class="result-price" id="result-hot-heat-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--gas" id="result-row-gas">
+        <div class="result-row-left">
+          <span>Газ</span>
+          <span class="result-detail" id="result-gas-detail"></span>
+        </div>
+        <span class="result-price" id="result-gas-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--drainage">
+        <div class="result-row-left">
+          <span>Водоотведение</span>
+          <span class="result-detail" id="result-drainage-detail"></span>
+        </div>
+        <span class="result-price" id="result-drainage-price">0 ₽</span>
+      </div>
+
+      <div class="result-row result-row--internet" id="result-row-internet" style="display:none">
+        <div class="result-row-left">
+          <span>Интернет</span>
+          <span class="result-detail" id="result-internet-detail">фиксированно</span>
+        </div>
+        <span class="result-price" id="result-internet-price">0 ₽</span>
+      </div>
+
+    </div>
+
+    <div class="result-total">
+      <span>Итого к оплате:</span>
+      <span class="result-total-price" id="result-total">0 ₽</span>
+    </div>
+
+    <button class="btn-secondary" id="btn-pdf" style="margin-top:8px">📄 Скачать PDF</button>
+    <button class="btn-primary" id="btn-save">Сохранить и закрыть ✓</button>
+  </div>
+
+
+  <!-- ========== ЭКРАН 3: НАСТРОЙКИ ТАРИФОВ ========== -->
+  <div id="screen-settings" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-settings">← Назад</button>
+      <h2 class="screen-title" id="settings-title">Настройки</h2>
+    </div>
+
+    <!-- Показания прошлого месяца (вводятся один раз при первом запуске) -->
+    <div class="settings-section-title">Показания прошлого месяца</div>
+    <p class="settings-hint">Введи один раз — дальше приложение будет запоминать само.</p>
+
+    <div class="settings-list">
+      <div class="setting-row">
+        <label class="setting-label">⚡ Электричество (кВт·ч)</label>
+        <input class="setting-input" id="prev-setting-electric" type="number" inputmode="decimal" step="0.001" placeholder="например: 14502" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔵 Холодная вода (м³)</label>
+        <input class="setting-input" id="prev-setting-cold" type="number" inputmode="decimal" step="0.001" placeholder="например: 123.456" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔴 Горячая вода (м³)</label>
+        <input class="setting-input" id="prev-setting-hot" type="number" inputmode="decimal" step="0.001" placeholder="например: 87.123" />
+      </div>
+      <div class="setting-row" id="prev-gas-row" style="display:none">
+        <label class="setting-label">🟣 Газ (м³)</label>
+        <input class="setting-input" id="prev-setting-gas" type="number" inputmode="decimal" step="0.001" placeholder="например: 1234.567" />
+      </div>
+    </div>
+
+    <!-- Тарифы -->
+    <div class="settings-section-title" style="margin-top:20px">Тарифы</div>
+    <p class="settings-hint">Цены из квитанции ЖКХ.</p>
+
+    <div class="settings-list">
+      <div class="setting-row">
+        <label class="setting-label">⚡ Электричество (₽ / кВт·ч)</label>
+        <input class="setting-input" id="tariff-electric" type="number" inputmode="decimal" step="0.01" placeholder="например: 5.47" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔵 Холодная вода (₽ / м³)</label>
+        <input class="setting-input" id="tariff-cold" type="number" inputmode="decimal" step="0.01" placeholder="например: 38.06" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔴 Горячая вода (₽ / м³)</label>
+        <input class="setting-input" id="tariff-hot" type="number" inputmode="decimal" step="0.01" placeholder="например: 197.42" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🟠 Подогрев г/в (₽ / м³)</label>
+        <input class="setting-input" id="tariff-hot-heat" type="number" inputmode="decimal" step="0.01" placeholder="например: 2346.24" />
+      </div>
+      <div class="setting-row setting-row--toggle">
+        <label class="setting-label">🟣 Газ подключён?</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-gas" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div id="gas-tariff-row" class="setting-row" style="display:none">
+        <label class="setting-label">🟣 Газ (₽ / м³)</label>
+        <input class="setting-input" id="tariff-gas" type="number" inputmode="decimal" step="0.01" placeholder="например: 7.42" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🌐 Интернет (₽ / мес)</label>
+        <input class="setting-input" id="tariff-internet" type="number" inputmode="decimal" step="1" placeholder="например: 600" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🚿 Водоотведение (₽ / м³)</label>
+        <input class="setting-input" id="tariff-drainage" type="number" inputmode="decimal" step="0.01" placeholder="например: 28.15" />
+      </div>
+    </div>
+
+    <!-- Скрытый раздел владельца — появляется после 5 нажатий на «Настройки» -->
+    <div class="owner-section" id="owner-section" style="display:none">
+      <div class="settings-section-title" style="margin-top:20px">🔐 Для владельца</div>
+      <div class="settings-list">
+        <div class="setting-row">
+          <label class="setting-label">🤖 Токен бота (от BotFather)</label>
+          <input class="setting-input" id="bot-token" type="text" autocomplete="off" placeholder="7412638590:AAFxxx..." />
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">👤 Username бота (без @)</label>
+          <input class="setting-input" id="bot-username" type="text" autocomplete="off" placeholder="MyUtilityBot" />
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">🏠 Telegram ID жильца</label>
+          <input class="setting-input" id="tenant-tg-id" type="text" autocomplete="off" placeholder="123456789" />
+          <span class="settings-hint" style="margin-top:2px">Жилец должен написать боту /start — ты увидишь его ID в боте</span>
+        </div>
+      </div>
+      <button class="btn-secondary" id="btn-set-owner">👤 Я — владелец этой квартиры</button>
+      <button class="btn-secondary" id="btn-open-act" style="margin-top:4px">📋 Акт приёма-передачи</button>
+      <div class="owner-status" id="owner-status"></div>
+    </div>
+
+    <button class="btn-primary" id="btn-save-settings">Сохранить ✓</button>
+    <div class="settings-saved" id="settings-saved-msg" style="display:none">✅ Настройки сохранены!</div>
+  </div>
+
+
+  <!-- ========== ЭКРАН 4: ИСТОРИЯ ========== -->
+  <div id="screen-history" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-history">← Назад</button>
+      <h2 class="screen-title">История</h2>
+    </div>
+    <div id="history-chart-wrap" style="display:none">
+      <div class="settings-section-title" style="margin-bottom:8px">График расходов, ₽</div>
+      <div id="history-chart"></div>
+    </div>
+    <div id="history-content"></div>
+    <div class="history-empty" id="history-empty" style="display:none">
+      Пока нет сохранённых данных.<br/>Рассчитай первый месяц!
+    </div>
+  </div>
+
+
+  <!-- ========== ЭКРАН 5: АКТ ПРИЁМА-ПЕРЕДАЧИ ========== -->
+  <div id="screen-act" class="screen">
+    <div class="header">
+      <button class="btn-back" id="btn-back-from-act">← Назад</button>
+      <h2 class="screen-title">Акт передачи</h2>
+    </div>
+
+    <p class="settings-hint">Начальные показания счётчиков при заезде жильца. Сохраняются как «прошлый месяц» для первого расчёта.</p>
+
+    <div class="settings-section-title" style="margin-top:4px">Дата заезда</div>
+    <div class="settings-list">
+      <div class="setting-row">
+        <input class="setting-input" id="act-date" type="date" />
+      </div>
+    </div>
+
+    <div class="settings-section-title" style="margin-top:16px">Показания счётчиков</div>
+    <div class="settings-list">
+      <div class="setting-row">
+        <label class="setting-label">⚡ Электричество (кВт·ч)</label>
+        <input class="setting-input" id="act-electric" type="number" inputmode="decimal" step="0.001" placeholder="0.000" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔵 Холодная вода (м³)</label>
+        <input class="setting-input" id="act-cold" type="number" inputmode="decimal" step="0.001" placeholder="0.000" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🔴 Горячая вода (м³)</label>
+        <input class="setting-input" id="act-hot" type="number" inputmode="decimal" step="0.001" placeholder="0.000" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🟣 Газ (м³)</label>
+        <input class="setting-input" id="act-gas" type="number" inputmode="decimal" step="0.001" placeholder="0.000" />
+      </div>
+    </div>
+
+    <div id="act-saved-block" style="display:none">
+      <div class="settings-section-title" style="margin-top:16px">Сохранённый акт</div>
+      <div class="act-card" id="act-saved-text"></div>
+    </div>
+
+    <button class="btn-primary" id="btn-save-act" style="margin-top:16px">Сохранить акт ✓</button>
+    <div class="settings-saved" id="act-saved-msg" style="display:none">✅ Акт сохранён!</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
