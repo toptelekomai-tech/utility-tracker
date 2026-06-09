@@ -376,6 +376,32 @@ html, body {
 .result-row--drainage::before  { background: var(--color-drainage); }
 .result-row--internet::before  { background: var(--color-internet); }
 
+/* Велком */
+.welcome-icon {
+  font-size: 72px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.12));
+}
+.welcome-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+.welcome-feature {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  text-align: left;
+}
+.welcome-feature-icon { font-size: 28px; flex-shrink: 0; }
+.welcome-feature-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.welcome-feature-desc  { font-size: 12px; color: var(--hint); line-height: 1.4; }
+
 /* Тумблер */
 .setting-row--toggle { align-items: center; }
 .toggle-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0; }

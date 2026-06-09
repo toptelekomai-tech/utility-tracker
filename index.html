@@ -10,6 +10,47 @@
 </head>
 <body>
 
+  <!-- ========== ВЕЛКОМ (только при первом запуске в Telegram) ========== -->
+  <div id="screen-welcome" class="screen" style="align-items:center;text-align:center;justify-content:center;gap:20px;padding:32px 24px;">
+    <div class="welcome-icon">🏠</div>
+    <div>
+      <h1 style="font-size:24px;font-weight:800;margin-bottom:8px">Счётчики ЖКХ</h1>
+      <p style="font-size:15px;color:var(--hint);line-height:1.5">Считает коммуналку за 30 секунд.<br/>Никаких таблиц и калькуляторов.</p>
+    </div>
+    <div class="welcome-features">
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">📋</span>
+        <div>
+          <div class="welcome-feature-title">Вводишь показания</div>
+          <div class="welcome-feature-desc">Электричество, вода, газ, интернет</div>
+        </div>
+      </div>
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">💰</span>
+        <div>
+          <div class="welcome-feature-title">Получаешь итог</div>
+          <div class="welcome-feature-desc">Разбивка по каждой услуге и сумма к оплате</div>
+        </div>
+      </div>
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">📄</span>
+        <div>
+          <div class="welcome-feature-title">Скачиваешь PDF</div>
+          <div class="welcome-feature-desc">Отправляешь арендодателю одной кнопкой</div>
+        </div>
+      </div>
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">📊</span>
+        <div>
+          <div class="welcome-feature-title">История за 3 года</div>
+          <div class="welcome-feature-desc">График расходов и сравнение по месяцам</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn-welcome-start" style="margin-top:8px">Начать →</button>
+    <p style="font-size:12px;color:var(--hint)">Бесплатно · Данные хранятся в твоём Telegram</p>
+  </div>
+
   <!-- ========== ЛЕНДИНГ (только в браузере, не в Telegram) ========== -->
   <div id="screen-landing" class="screen" style="align-items:center;text-align:center;justify-content:center;gap:24px;">
     <div style="font-size:56px">🏠</div>

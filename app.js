@@ -900,5 +900,18 @@ if (!tg?.initData) {
   });
   showScreen('screen-landing');
 } else {
-  loadAll();
+  Storage.get('welcome_seen', seen => {
+    if (seen === '1') {
+      loadAll();
+    } else {
+      showScreen('screen-welcome');
+    }
+  });
 }
+
+document.getElementById('btn-welcome-start').addEventListener('click', () => {
+  Storage.set('welcome_seen', '1', () => {
+    loadAll();
+    showScreen('screen-settings');
+  });
+});
