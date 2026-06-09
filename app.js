@@ -125,6 +125,7 @@ function applyGasVisibility(on) {
 // =============================================
 let lastCalcResult = null;
 let isOwnerRole    = false;
+let botUsername    = '';
 
 // =============================================
 //  ЗАГРУЗКА ДАННЫХ ПРИ СТАРТЕ
@@ -164,6 +165,7 @@ function loadAll() {
     if (on) AptStorage.get('tariff_gas', v => { if (v) document.getElementById('tariff-gas').value = v; });
   });
 
+  Storage.get('bot_username', val => { if (val) botUsername = val; });
   checkOwner();
   initAptSelector();
 }
@@ -279,6 +281,12 @@ function exportPdf() {
   doc.setFont('helvetica', 'bold');
   doc.text('TOTAL:', 20, y);
   doc.text(`${fmt(data.total)} RUB`, 170, y, { align: 'right' });
+
+  y += 12;
+  doc.setFontSize(8);
+  doc.setTextColor(180);
+  const botLink = botUsername ? `t.me/${botUsername}` : 'Счётчики ЖКХ';
+  doc.text(`Создано в ${botLink}`, 105, y, { align: 'center' });
 
   doc.save(`utility-${data.month.replace(' ', '-')}.pdf`);
 }
@@ -886,4 +894,11 @@ document.getElementById('toggle-gas').addEventListener('change', e => {
 // =============================================
 //  СТАРТ
 // =============================================
-loadAll();
+if (!tg?.initData) {
+  Storage.get('bot_username', val => {
+    if (val) document.getElementById('landing-bot-link').href = `https://t.me/${val}`;
+  });
+  showScreen('screen-landing');
+} else {
+  loadAll();
+}

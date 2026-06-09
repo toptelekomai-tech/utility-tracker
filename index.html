@@ -10,6 +10,34 @@
 </head>
 <body>
 
+  <!-- ========== ЛЕНДИНГ (только в браузере, не в Telegram) ========== -->
+  <div id="screen-landing" class="screen" style="align-items:center;text-align:center;justify-content:center;gap:24px;">
+    <div style="font-size:56px">🏠</div>
+    <h1 style="font-size:26px;font-weight:800;line-height:1.2">Счётчики ЖКХ</h1>
+    <p style="font-size:16px;color:var(--hint);max-width:320px;line-height:1.5">
+      Telegram-приложение для расчёта коммунальных платежей.<br/>
+      Вводишь показания — получаешь итог за 30 секунд.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px">
+      <div style="background:var(--card-bg);border-radius:var(--radius);padding:16px;text-align:left">
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px">Что умеет:</div>
+        <div style="font-size:14px;color:var(--hint);line-height:1.8">
+          ⚡ Электричество<br/>
+          🔵 Холодная и 🔴 горячая вода<br/>
+          🚿 Водоотведение и подогрев<br/>
+          🌐 Интернет<br/>
+          📄 PDF-отчёт одной кнопкой<br/>
+          📊 История за 3 года<br/>
+          🔔 Напоминания жильцу
+        </div>
+      </div>
+    </div>
+    <a id="landing-bot-link" href="https://t.me/" style="display:block;background:var(--accent);color:var(--accent-text);border-radius:var(--radius);padding:16px 32px;font-size:16px;font-weight:700;text-decoration:none;width:100%;max-width:300px;box-sizing:border-box">
+      Открыть в Telegram →
+    </a>
+    <p style="font-size:12px;color:var(--hint)">Бесплатно · Работает без установки</p>
+  </div>
+
   <!-- ========== ЭКРАН 1: ВВОД ПОКАЗАНИЙ ========== -->
   <div id="screen-main" class="screen active">
     <div class="header">
