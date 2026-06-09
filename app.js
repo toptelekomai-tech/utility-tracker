@@ -396,13 +396,14 @@ function handleMeterPhoto(input, targetId) {
 //  РАСЧЁТ
 // =============================================
 function calculate() {
+  const gasOn       = document.getElementById('toggle-gas').checked;
   const curElectric = parseFloat(document.getElementById('input-electric').value);
   const curCold     = parseFloat(document.getElementById('input-cold').value);
   const curHot      = parseFloat(document.getElementById('input-hot').value);
-  const curGas      = parseFloat(document.getElementById('input-gas').value);
+  const curGas      = gasOn ? parseFloat(document.getElementById('input-gas').value) : 0;
 
-  if (isNaN(curElectric) || isNaN(curCold) || isNaN(curHot) || isNaN(curGas)) {
-    alert('Пожалуйста, заполни все четыре показания счётчиков.');
+  if (isNaN(curElectric) || isNaN(curCold) || isNaN(curHot) || (gasOn && isNaN(curGas))) {
+    alert('Пожалуйста, заполни все показания счётчиков.');
     return;
   }
 
@@ -421,8 +422,6 @@ function calculate() {
     const prevCold     = parseFloat(prevColdStr) || 0;
     const prevHot      = parseFloat(prevHotStr)  || 0;
     const prevGas      = parseFloat(prevGasStr)  || 0;
-
-    const gasOn = document.getElementById('toggle-gas').checked;
 
     const tariffEl       = parseFloat(tElStr)       || 0;
     const tariffCold     = parseFloat(tColdStr)     || 0;
