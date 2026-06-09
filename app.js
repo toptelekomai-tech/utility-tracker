@@ -898,7 +898,7 @@ if (!tg?.initData) {
   Storage.get('bot_username', val => {
     if (val) document.getElementById('landing-bot-link').href = `https://t.me/${val}`;
   });
-  showScreen('screen-landing');
+  showScreen('screen-welcome'); // временно для превью
 } else {
   Storage.get('welcome_seen', seen => {
     if (seen === '1') {
